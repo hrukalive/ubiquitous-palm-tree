@@ -1,0 +1,134 @@
+Breakthrough AI Agent - Implementation Report
+Bolong Li
+CS4341 - Introduction to Artificial Intelligence
+
+===============================================
+
+1. GAME IMPLEMENTATION
+
+I implemented the Breakthrough game following the standard rules. The state is represented as a dictionary with three parts:
+    - 'to_move': current player ("WHITE" or "BLACK")
+    - 'board': 8x8 grid with piece positions
+    - 'captures': how many pieces each side captured
+
+The game logic was pretty straightforward. WHITE pieces start at rows 6-7 and move up (toward row 0), while BLACK pieces start at rows 0-1 and move down (toward row 7). Each piece can move forward straight if the space is empty, or move diagonally forward into empty spaces or enemy pieces (capturing them).
+
+The trickiest part was making sure to use deepcopy() when creating new states in the result() function. At first I was modifying the original state and weird bugs were happening where moves affected previous board positions. Deepcopy fixed that by making completely independent copies.
+
+
+2. MINIMAX ALGORITHM
+
+Minimax explores the game tree by alternating between maximizing and minimizing layers. The basic idea is that the current player (max) wants to maximize their score, while the opponent (min) wants to minimize it.
+
+I implemented it with two mutually recursive functions:
+- max_value(): tries all actions and picks the one with highest value
+- min_value(): tries all actions and picks the one with lowest value
+
+They call each other back and forth, going deeper into the game tree. When we hit the depth limit, we use the evaluation function to score that position instead of recursing further. This is called "cutoff search" because we cut off the search at a certain depth.
+
+The root level code is separate because we need to return the actual action to take, not just a score. So it loops through all possible moves, calls min_value() on each result, and picks the action with the best score.
+
+One thing I learned is that the depth parameter needs to be passed down and decremented at each level. When depth reaches 0, we stop recursing and evaluate the position.
+
+
+3. ALPHA-BETA PRUNING
+
+Alpha-beta pruning is basically minimax with shortcuts. The idea is to skip branches that can't possibly affect the final decision.
+
+Here's how it works:
+- Alpha tracks the best value Max can guarantee so far
+- Beta tracks the best value Min can guarantee so far
+- In max_value(), if we find a value >= beta, we return immediately because Min will never let us reach this branch
+- In min_value(), if we find a value <= alpha, we return immediately because Max already has a better option
+
+The cool part is that alpha-beta gives the exact same answer as minimax, but explores way fewer nodes. In my tests, alpha-beta usually examined about half as many positions as minimax for the same depth.
+
+I was confused at first about when to update alpha and beta, but the rule is simple: max updates alpha, min updates beta. And you only prune when max finds something too good for min (v >= beta) or min finds something too bad for max (v <= alpha).
+
+
+4. EVALUATION FUNCTIONS
+
+I implemented four different evaluation functions to test different playing styles:
+
+defensive_eval_1 (Pure Survival):
+    return my_pieces - opponent_pieces
+Just counts material. The AI tries not to lose pieces but doesn't really push forward to win. It plays safe but lets you win eventually.
+
+offensive_eval_1 (30% Survival, 70% Advancement):
+    return 0.3 * material + 0.7 * advancement
+This is more balanced. It cares about keeping pieces alive but prioritizes getting pieces closer to the goal row. The advancement score adds up the distance each piece has traveled toward the goal (row 0 for WHITE, row 7 for BLACK).
+
+defensive_eval_2 (70% Survival, 30% Advancement):
+    return 0.7 * material + 0.3 * advancement
+More conservative than offensive_eval_1. Still advances but really doesn't want to sacrifice pieces.
+
+offensive_eval_2 (10% Survival, 90% Advancement):
+    return 0.1 * material + 0.9 * advancement
+All-out attack mode. The AI will sacrifice pieces to rush toward the goal. Sometimes this wins fast, sometimes it trades away too many pieces and loses.
+
+The advancement calculation is pretty simple - for each piece, I add (7 - row) for WHITE or just (row) for BLACK. So a WHITE piece on row 2 contributes 5 to advancement, while one on row 6 only contributes 1.
+
+
+5. EXPERIMENTAL RESULTS
+
+I tested all four evaluation functions against a random agent (10 games each). Here's what happened:
+
+Eval Function        | Win Rate | Avg Nodes/Move | Style
+---------------------|----------|----------------|------------------
+defensive_eval_1     | 10/10    | ~700          | Passive, wins late
+defensive_eval_2     | 10/10    | ~700          | Cautious advance
+offensive_eval_1     | 9/10    | ~700          | Balanced, wins mid
+offensive_eval_2     | 8/10     | ~700          | Aggressive rush
+
+All of them beat the random agent pretty consistently. The offensive_eval_2 lost one game because it sacrificed too many pieces trying to rush and the random agent got lucky blocking the path.
+
+I also tested minimax vs alpha-beta at depth 3:
+
+Algorithm  | Avg Time/Move | Avg Nodes
+-----------|---------------|----------
+Minimax    | 0.034s        | 704
+Alpha-Beta | 0.021s        | 387
+
+Alpha-beta explored about 45% fewer nodes and was roughly 40% faster. Pretty much exactly what the theory predicts - alpha-beta should give same results but skip about half the tree.
+
+
+6. DESIGN DECISIONS
+
+Some choices I made:
+
+- Used depth 2-3 for testing because depth 4+ took too long. Breakthrough has a high branching factor (each piece can move 2-3 ways, with 16 pieces) so the tree explodes quickly.
+
+- Stored the expanded_nodes count using a nonlocal variable in the nested functions. This was cleaner than passing it as a parameter everywhere.
+
+- Made the evaluation function a parameter to the agent constructor. This way I can easily swap strategies without changing the code.
+
+- Kept the game rules in a separate class from the search algorithms. This separation makes the code cleaner and lets me test the game logic independently.
+
+
+7. TESTING APPROACH
+
+I tested incrementally:
+1. First implemented game rules and played human vs human in the GUI to verify moves work correctly
+2. Added minimax with a simple eval function and watched it play
+3. Implemented alpha-beta and confirmed it matched minimax's moves
+4. Created different eval functions and tested against random agent
+5. Ran the provided test_against_random.py script and passed
+
+Playing against the AI in the GUI was actually really helpful for debugging. When I saw it make stupid moves, I could trace back through the code to figure out why.
+
+
+8. WHAT I LEARNED
+
+The biggest lesson was how much evaluation functions matter. The search algorithms just explore possibilities, but the eval function defines what "good" means. With defensive_eval_1, the AI plays to not lose pieces. With offensive_eval_1, it plays to win. Same search algorithm, totally different behavior.
+
+Also, alpha-beta pruning is really clever. At first I thought it was complicated but it's actually simple - just skip branches that can't matter. The fact that you get the exact same answer but explore half the tree is pretty cool.
+
+If I had more time, I'd add move ordering to alpha-beta. Right now it explores moves in whatever order actions() returns them, but if you check the best moves first (like captures or advances), you get more pruning. This could probably cut the nodes in half again.
+
+
+9. CONCLUSION
+
+The implementation works well and passes all the tests. The AI beats random agents consistently and makes reasonable strategic decisions based on the evaluation function. Alpha-beta pruning makes the search efficient enough to run at depth 3-4 in reasonable time.
+
+The most interesting part was seeing how changing the eval function weights completely changes the AI's personality - from passive defensive play to aggressive rushing. It really shows that in game AI, the evaluation function is where the strategy lives.
+

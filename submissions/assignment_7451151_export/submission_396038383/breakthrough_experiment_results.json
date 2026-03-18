@@ -1,0 +1,641 @@
+{
+  "meta": {
+    "runs_per_matchup": 1,
+    "max_moves": 400,
+    "minimax_depth": 3,
+    "alphabeta_depth": 4,
+    "timestamp": "2026-03-05T21:44:49"
+  },
+  "matchups": [
+    {
+      "label": "1) Minimax (Off1) vs Alpha-beta (Off1)",
+      "white_agent": "Minimax d=3 Off1",
+      "black_agent": "AlphaBeta d=4 Off1",
+      "results": [
+        {
+          "winner": "black",
+          "white_name": "Minimax d=3 Off1",
+          "black_name": "AlphaBeta d=4 Off1",
+          "total_moves": 90,
+          "white_nodes": 394175,
+          "black_nodes": 792676,
+          "white_nodes_per_move": 8759.444444444445,
+          "black_nodes_per_move": 17615.022222222222,
+          "white_time_per_move": 0.30201447777864004,
+          "black_time_per_move": 0.6196270622287152,
+          "white_captures": 11,
+          "black_captures": 15,
+          "final_board": [
+            [
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "BLACK",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "WHITE"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "BLACK",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "BLACK",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "BLACK",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "BLACK",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ]
+          ],
+          "matchup": "1) Minimax (Off1) vs Alpha-beta (Off1)",
+          "run_index": 1
+        }
+      ]
+    },
+    {
+      "label": "2) Alpha-beta (Off2) vs Alpha-beta (Def1)",
+      "white_agent": "AlphaBeta d=4 Off2",
+      "black_agent": "AlphaBeta d=4 Def1",
+      "results": [
+        {
+          "winner": "white",
+          "white_name": "AlphaBeta d=4 Off2",
+          "black_name": "AlphaBeta d=4 Def1",
+          "total_moves": 61,
+          "white_nodes": 1459842,
+          "black_nodes": 777499,
+          "white_nodes_per_move": 47091.67741935484,
+          "black_nodes_per_move": 25916.633333333335,
+          "white_time_per_move": 3.877627148398108,
+          "black_time_per_move": 0.9057063266634942,
+          "white_captures": 5,
+          "black_captures": 7,
+          "final_board": [
+            [
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "WHITE",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "BLACK",
+              "EMPTY",
+              "BLACK",
+              "EMPTY",
+              "BLACK",
+              "BLACK"
+            ],
+            [
+              "BLACK",
+              "BLACK",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "BLACK",
+              "BLACK",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "BLACK",
+              "BLACK"
+            ],
+            [
+              "WHITE",
+              "BLACK",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "WHITE",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "WHITE",
+              "WHITE",
+              "WHITE",
+              "WHITE",
+              "WHITE",
+              "WHITE",
+              "EMPTY"
+            ]
+          ],
+          "matchup": "2) Alpha-beta (Off2) vs Alpha-beta (Def1)",
+          "run_index": 1
+        }
+      ]
+    },
+    {
+      "label": "3) Alpha-beta (Def2) vs Alpha-beta (Off1)",
+      "white_agent": "AlphaBeta d=4 Def2",
+      "black_agent": "AlphaBeta d=4 Off1",
+      "results": [
+        {
+          "winner": "white",
+          "white_name": "AlphaBeta d=4 Def2",
+          "black_name": "AlphaBeta d=4 Off1",
+          "total_moves": 89,
+          "white_nodes": 1532607,
+          "black_nodes": 1139362,
+          "white_nodes_per_move": 34057.933333333334,
+          "black_nodes_per_move": 25894.590909090908,
+          "white_time_per_move": 2.6128427466610447,
+          "black_time_per_move": 0.9033556590941523,
+          "white_captures": 14,
+          "black_captures": 4,
+          "final_board": [
+            [
+              "EMPTY",
+              "EMPTY",
+              "WHITE",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "WHITE",
+              "WHITE",
+              "WHITE",
+              "WHITE"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "WHITE",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "WHITE",
+              "BLACK",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "BLACK",
+              "EMPTY",
+              "EMPTY",
+              "WHITE",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "WHITE",
+              "WHITE",
+              "EMPTY",
+              "EMPTY",
+              "WHITE",
+              "WHITE",
+              "EMPTY"
+            ]
+          ],
+          "matchup": "3) Alpha-beta (Def2) vs Alpha-beta (Off1)",
+          "run_index": 1
+        }
+      ]
+    },
+    {
+      "label": "4) Alpha-beta (Off2) vs Alpha-beta (Off1)",
+      "white_agent": "AlphaBeta d=4 Off2",
+      "black_agent": "AlphaBeta d=4 Off1",
+      "results": [
+        {
+          "winner": "white",
+          "white_name": "AlphaBeta d=4 Off2",
+          "black_name": "AlphaBeta d=4 Off1",
+          "total_moves": 87,
+          "white_nodes": 1632149,
+          "black_nodes": 1341530,
+          "white_nodes_per_move": 37094.295454545456,
+          "black_nodes_per_move": 31198.372093023256,
+          "white_time_per_move": 3.0193947159092533,
+          "black_time_per_move": 1.079124388371616,
+          "white_captures": 14,
+          "black_captures": 3,
+          "final_board": [
+            [
+              "WHITE",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "WHITE",
+              "EMPTY",
+              "WHITE",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "WHITE",
+              "WHITE",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "WHITE"
+            ],
+            [
+              "EMPTY",
+              "WHITE",
+              "EMPTY",
+              "EMPTY",
+              "WHITE",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "WHITE",
+              "BLACK",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "BLACK",
+              "WHITE",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "WHITE",
+              "EMPTY",
+              "WHITE",
+              "WHITE",
+              "EMPTY"
+            ]
+          ],
+          "matchup": "4) Alpha-beta (Off2) vs Alpha-beta (Off1)",
+          "run_index": 1
+        }
+      ]
+    },
+    {
+      "label": "5) Alpha-beta (Def2) vs Alpha-beta (Def1)",
+      "white_agent": "AlphaBeta d=4 Def2",
+      "black_agent": "AlphaBeta d=4 Def1",
+      "results": [
+        {
+          "winner": "black",
+          "white_name": "AlphaBeta d=4 Def2",
+          "black_name": "AlphaBeta d=4 Def1",
+          "total_moves": 74,
+          "white_nodes": 3374362,
+          "black_nodes": 860299,
+          "white_nodes_per_move": 91198.97297297297,
+          "black_nodes_per_move": 23251.324324324323,
+          "white_time_per_move": 7.334765345940517,
+          "black_time_per_move": 0.8080792486529194,
+          "white_captures": 4,
+          "black_captures": 5,
+          "final_board": [
+            [
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "BLACK",
+              "BLACK",
+              "EMPTY",
+              "BLACK",
+              "BLACK",
+              "EMPTY",
+              "WHITE",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "BLACK",
+              "BLACK",
+              "BLACK",
+              "BLACK",
+              "BLACK",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "BLACK",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "WHITE",
+              "WHITE",
+              "EMPTY",
+              "EMPTY",
+              "WHITE",
+              "WHITE",
+              "EMPTY",
+              "BLACK"
+            ],
+            [
+              "WHITE",
+              "WHITE",
+              "WHITE",
+              "WHITE",
+              "WHITE",
+              "EMPTY",
+              "EMPTY",
+              "WHITE"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "BLACK"
+            ]
+          ],
+          "matchup": "5) Alpha-beta (Def2) vs Alpha-beta (Def1)",
+          "run_index": 1
+        }
+      ]
+    },
+    {
+      "label": "6) Alpha-beta (Off2) vs Alpha-beta (Def2)",
+      "white_agent": "AlphaBeta d=4 Off2",
+      "black_agent": "AlphaBeta d=4 Def2",
+      "results": [
+        {
+          "winner": "white",
+          "white_name": "AlphaBeta d=4 Off2",
+          "black_name": "AlphaBeta d=4 Def2",
+          "total_moves": 75,
+          "white_nodes": 2801850,
+          "black_nodes": 1163173,
+          "white_nodes_per_move": 73732.8947368421,
+          "black_nodes_per_move": 31437.108108108107,
+          "white_time_per_move": 6.286964257894158,
+          "black_time_per_move": 2.2739113135061957,
+          "white_captures": 9,
+          "black_captures": 3,
+          "final_board": [
+            [
+              "BLACK",
+              "EMPTY",
+              "EMPTY",
+              "BLACK",
+              "EMPTY",
+              "EMPTY",
+              "WHITE",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "BLACK",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "WHITE",
+              "EMPTY",
+              "BLACK",
+              "EMPTY",
+              "WHITE",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "WHITE",
+              "EMPTY",
+              "WHITE",
+              "EMPTY",
+              "WHITE",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "WHITE",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "BLACK",
+              "EMPTY",
+              "EMPTY"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "BLACK",
+              "BLACK"
+            ],
+            [
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "EMPTY",
+              "WHITE"
+            ],
+            [
+              "EMPTY",
+              "WHITE",
+              "WHITE",
+              "WHITE",
+              "WHITE",
+              "WHITE",
+              "EMPTY",
+              "EMPTY"
+            ]
+          ],
+          "matchup": "6) Alpha-beta (Off2) vs Alpha-beta (Def2)",
+          "run_index": 1
+        }
+      ]
+    }
+  ]
+}
