@@ -1,42 +1,43 @@
 """
-Tournament Configuration
-All constants and TrueSkill environment parameters for Breakthrough tournament.
+Tournament configuration for Breakthrough tournaments.
 """
 
 import os
+
 import trueskill
 
-# Directory paths (configurable via environment variables)
-SUBMISSIONS_DIR = r"D:\Downloads\submissions_final\assignment_7451151_export"
-METADATA_FILE = os.path.join(SUBMISSIONS_DIR, "submission_metadata.yml")
-RESULTS_DIR = "results"
-STATE_FILE = "tournament_state.json"
-LEADERBOARD_FILE = "leaderboard.txt"
+# Submission exports live under this root. Each export directory is expected to
+# contain a submission_metadata.yml plus submission_<id>/ folders.
+SUBMISSIONS_DIR = os.environ.get("BREAKTHROUGH_SUBMISSIONS_ROOT", "submissions")
+LEADERBOARD_FILE = os.environ.get("BREAKTHROUGH_LEADERBOARD_FILE", "leaderboard.txt")
+RESULTS_DIR = os.environ.get("BREAKTHROUGH_RESULTS_DIR", "results")
+STATE_FILE = os.environ.get("BREAKTHROUGH_STATE_FILE", "tournament_state.json")
+TIEBREAK_FILE = os.environ.get("BREAKTHROUGH_TIEBREAK_FILE", "tiebreak_results.json")
 
 # Eligibility
-MIN_SCORE = 50.0  # Only submissions with Gradescope score >= 50.0 are eligible
+MIN_SCORE = 50.0
 
 # Game settings
-AGENT_DEPTH = 3  # AlphaBeta search depth (uniform for all agents for fairness)
-MAX_MOVES = 4000  # Per-game move limit (draws after this)
-GAME_TIMEOUT = 60000  # Per-game timeout in seconds (5 minutes)
+AGENT_DEPTH = 2
+MAX_MOVES = 4000
+GAME_TIMEOUT = 300  # 5 minutes per game
 
 # Tournament settings
-GAMES_PER_PAIRING = 2  # 2 = play both colors (white & black), 1 = single color
-MAX_PARALLEL_WORKERS = 16  # For ProcessPoolExecutor
-REPEAT_WINDOW = 3  # Avoid rematches within this many rounds
+GAMES_PER_PAIRING = 2
+MAX_PARALLEL_WORKERS = 16
+REPEAT_WINDOW = 3
+
+# Tiebreak settings
+TIEBREAK_SCORE_PRECISION = 6
+TIEBREAK_MAX_ROUNDS = 3
 
 # TrueSkill parameters
-# Using standard defaults from Microsoft TrueSkill paper
-TS_MU = 25.0  # Default skill mean
-TS_SIGMA = 25.0 / 3  # Default skill standard deviation (8.333)
-TS_BETA = 25.0 / 6  # Skill class width (4.166)
-TS_TAU = (
-    25.0 / 300
-)  # Dynamics factor (0.0833) - how much uncertainty increases per round
-TS_DRAW_PROBABILITY = 0.05  # 5% draw probability (low for Breakthrough)
+TS_MU = 25.0
+TS_SIGMA = 25.0 / 3
+TS_BETA = 25.0 / 6
+TS_TAU = 25.0 / 300
+TS_DRAW_PROBABILITY = 0.05
 
-# Create TrueSkill environment
 trueskill_env = trueskill.TrueSkill(
     mu=TS_MU,
     sigma=TS_SIGMA,
@@ -45,5 +46,4 @@ trueskill_env = trueskill.TrueSkill(
     draw_probability=TS_DRAW_PROBABILITY,
 )
 
-# Random seed for reproducibility
 TOURNAMENT_SEED = 42

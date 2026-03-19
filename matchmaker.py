@@ -263,10 +263,11 @@ def generate_tiebreaker_matchups(
     student_map: Optional[Dict[str, str]] = None,
 ) -> List[Dict[str, Any]]:
     """
-    Generate Swiss-style matchups for a tiebreaker group.
+    Generate no-bye matchups for a tiebreaker group.
 
-    Pairs players within a tied group using Swiss pairing with quality optimization.
-    Handles small groups (2-4 players) with bye support for odd-sized groups.
+    Small groups use a complete round-robin schedule so every pair is evaluated.
+    Larger groups use Swiss-style pairing with one extra series for odd-sized
+    groups so nobody sits out.
 
     Args:
         players: List of player IDs in the tied group (2-4 players)
@@ -278,14 +279,14 @@ def generate_tiebreaker_matchups(
     Returns:
         List of match dicts with format:
         {"match_id": "r100_match_0001", "white": str, "black": str, "round": int}
-        For byes: {"match_id": ..., "white": str, "black": None, "round": int}
 
     Example:
         >>> players = ["sub1", "sub2", "sub3"]
         >>> generate_tiebreaker_matchups(players, state, 100, 0, seed=42)
         [{"match_id": "r100_match_0001", "white": "sub1", "black": "sub2", "round": 100},
          {"match_id": "r100_match_0002", "white": "sub2", "black": "sub1", "round": 100},
-         {"match_id": "r100_match_0003", "white": "sub3", "black": None, "round": 100}]
+         {"match_id": "r100_match_0003", "white": "sub1", "black": "sub3", "round": 100},
+         ...]
     """
     if len(players) < 2:
         raise ValueError(f"Need at least 2 players for tiebreaker, got {len(players)}")
@@ -314,10 +315,56 @@ def generate_tiebreaker_matchups(
         if match.get("round") == round_num:  # Same tiebreaker round
             white = match.get("white")
             black = match.get("black")
-            if white and black:  # Not a bye
+            if white and black:
                 recent_matches.add(tuple(sorted([white, black])))
 
-    # Generate pairings
+    def can_pair(player1: str, player2: str) -> bool:
+        if player1 == player2:
+            return False
+        if student_map:
+            sid1 = student_map.get(player1, "")
+            sid2 = student_map.get(player2, "")
+            if sid1 and sid2 and sid1 == sid2:
+                return False
+        return True
+
+    def add_series(
+        match_list: List[Dict[str, Any]],
+        counter: int,
+        player1: str,
+        player2: str,
+    ) -> int:
+        for game_num in range(GAMES_PER_PAIRING):
+            counter += 1
+            match_id = f"r{round_num}_match_{counter:04d}"
+            if game_num % 2 == 0:
+                white, black = player1, player2
+            else:
+                white, black = player2, player1
+            match_list.append(
+                {
+                    "match_id": match_id,
+                    "white": white,
+                    "black": black,
+                    "round": round_num,
+                }
+            )
+        return counter
+
+    # Very small tied groups benefit more from complete coverage than Swiss pairing.
+    if len(sorted_players) <= 4:
+        matches = []
+        match_id_counter = match_id_offset
+        for i, player1 in enumerate(sorted_players):
+            for player2 in sorted_players[i + 1 :]:
+                if not can_pair(player1, player2):
+                    continue
+                match_id_counter = add_series(
+                    matches, match_id_counter, player1, player2
+                )
+        return matches
+
+    # Generate pairings for larger groups.
     matches = []
     paired = set()
     match_id_counter = match_id_offset
@@ -335,15 +382,11 @@ def generate_tiebreaker_matchups(
             if player2 in paired:
                 continue
 
-            # Check same-student constraint
-            if student_map:
-                sid1 = student_map.get(player1, "")
-                sid2 = student_map.get(player2, "")
-                if sid1 and sid2 and sid1 == sid2:
-                    logger.debug(
-                        f"Skipping same-student tiebreaker pairing: {player1} vs {player2}"
-                    )
-                    continue
+            if not can_pair(player1, player2):
+                logger.debug(
+                    f"Skipping same-student tiebreaker pairing: {player1} vs {player2}"
+                )
+                continue
 
             # Check if already played recently
             pairing_key = tuple(sorted([player1, player2]))
@@ -365,15 +408,11 @@ def generate_tiebreaker_matchups(
                 if player2 in paired:
                     continue
 
-                # Check same-student even in fallback
-                if student_map:
-                    sid1 = student_map.get(player1, "")
-                    sid2 = student_map.get(player2, "")
-                    if sid1 and sid2 and sid1 == sid2:
-                        logger.debug(
-                            f"Skipping same-student tiebreaker fallback: {player1} vs {player2}"
-                        )
-                        continue
+                if not can_pair(player1, player2):
+                    logger.debug(
+                        f"Skipping same-student tiebreaker fallback: {player1} vs {player2}"
+                    )
+                    continue
 
                 best_opponent = player2
                 break
@@ -381,44 +420,31 @@ def generate_tiebreaker_matchups(
         if best_opponent is not None:
             paired.add(player1)
             paired.add(best_opponent)
+            match_id_counter = add_series(
+                matches, match_id_counter, player1, best_opponent
+            )
 
-            # Create GAMES_PER_PAIRING matches (color swap)
-            for game_num in range(GAMES_PER_PAIRING):
-                match_id_counter += 1
-                match_id = f"r{round_num}_match_{match_id_counter:04d}"
-
-                # Alternate colors: first game player1=white, second game player2=white
-                if game_num % 2 == 0:
-                    white, black = player1, best_opponent
-                else:
-                    white, black = best_opponent, player1
-
-                matches.append(
-                    {
-                        "match_id": match_id,
-                        "white": white,
-                        "black": black,
-                        "round": round_num,
-                    }
-                )
-
-    # Handle odd player count (bye)
-    bye_player = None
-    for player in sorted_players:
-        if player not in paired:
-            bye_player = player
-            break
-
-    if bye_player is not None:
-        match_id_counter += 1
-        match_id = f"r{round_num}_match_{match_id_counter:04d}"
-        matches.append(
-            {
-                "match_id": match_id,
-                "white": bye_player,
-                "black": None,  # None indicates bye
-                "round": round_num,
-            }
+    # Odd-sized groups: give the remaining player an extra series instead of a bye.
+    remaining_players = [player for player in sorted_players if player not in paired]
+    if remaining_players:
+        extra_player = remaining_players[0]
+        best_opponent = None
+        best_quality = -1.0
+        for opponent in sorted_players:
+            if not can_pair(extra_player, opponent):
+                continue
+            quality = getattr(trueskill_env, "quality_1vs1")(
+                player_ratings[extra_player], player_ratings[opponent]
+            )
+            if quality > best_quality:
+                best_quality = quality
+                best_opponent = opponent
+        if best_opponent is None:
+            raise ValueError(
+                f"Could not find an extra opponent for odd tiebreak group: {extra_player}"
+            )
+        match_id_counter = add_series(
+            matches, match_id_counter, extra_player, best_opponent
         )
 
     return matches

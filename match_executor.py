@@ -12,10 +12,8 @@ Example:
 import argparse
 import json
 import logging
-import os
 import queue
 import threading
-import time
 from datetime import datetime, UTC
 from pathlib import Path
 from typing import Optional, Tuple, Any, Callable
@@ -243,19 +241,15 @@ def write_result(match_id: str, round_num: int, result: dict) -> str:
     Raises:
         OSError if write fails
     """
-    # Create output directory if needed
-    round_dir = os.path.join(RESULTS_DIR, f"round_{round_num:02d}")
-    Path(round_dir).mkdir(parents=True, exist_ok=True)
+    round_dir = Path(RESULTS_DIR) / f"round_{round_num:02d}"
+    round_dir.mkdir(parents=True, exist_ok=True)
+    filepath = round_dir / f"{match_id}.json"
 
-    # Write file
-    filename = f"{match_id}.json"
-    filepath = os.path.join(round_dir, filename)
-
-    with open(filepath, "w", encoding="utf-8") as f:
+    with filepath.open("w", encoding="utf-8") as f:
         json.dump(result, f, indent=2)
 
-    logger.info(f"Wrote result to {filepath}")
-    return filepath
+    logger.info("Wrote result to %s", filepath)
+    return str(filepath)
 
 
 def main():
